@@ -3,7 +3,7 @@
 "version": "1.0.0",
 "private": true,
 "scripts": {
-"deploy": "npx wrangler deploy index.js"
+"deploy": "npx wrangler deploy index.js --compatibility-date=2026-03-01"
 },
 "devDependencies": {
 "wrangler": "^4.0.0"
