@@ -1,7 +1,7 @@
 export default {
   async fetch(request, env, ctx) {
     if (request.method !== 'POST') {
-      return new Response('Telegram Bot Worker is active and running correctly!', { status: 200 });
+      return new Response('ربات تلگرام فعال است و آماده دریافت پیام‌هاست.', { status: 200 });
     }
 
     try {
@@ -11,16 +11,18 @@ export default {
         const chatId = update.message.chat.id;
         const text = update.message.text ? update.message.text.trim() : "";
         
-        let replyText = "سلام! من سیستم هوشمند شما هستم. چطور می‌توانم کمکتان کنم؟";
+        let replyText = "متوجه شدم. لطفاً دستورات صحیح را ارسال کنید.";
         
         if (text === '/start' || text.toLowerCase().startsWith('/start')) {
-          replyText = "سلام! 🚀 ربات شما با موفقیت و به صورت کاملاً جدید فعال شد.";
+          replyText = "سلام! 🚀 ربات هوشمند شما با موفقیت از طریق گیت‌هاب فعال شد و آماده پاسخگویی است.";
         } else if (text === '/help' || text.toLowerCase().startsWith('/help')) {
-          replyText = "راهنمای ربات:\n/start - شروع به کار\n/help - دریافت راهنمایی";
-        } else if (text.includes('خوبی')) {
-          replyText = "ممنون، من حالم عالیه! شما چطورید؟";
+          replyText = "راهنمای ربات:\n/start - شروع به کار\n/help - دریافت راهنمایی\n\nمی‌توانید سوالات خود را بپرسید.";
+        } else if (text.includes('خوبی') || text.includes('چطورید')) {
+          replyText = "ممنون، من یک دستیار دیجیتال هستم و حالم عالیست! شما چطورید؟";
+        } else if (text.includes('سلام') || text.includes('درود')) {
+          replyText = "سلام و درود بر شما! روزتون بخیر، چطور می‌توانم کمکتان کنم؟";
         } else if (text.length > 0) {
-          replyText = `دستور یا پیام شما («${text}») دریافت شد. چطور می‌توانم در این زمینه کمکتان کنم؟`;
+          replyText = "درخواست شما با موفقیت دریافت شد. چطور می‌توانم بیشتر راهنمایی‌تان کنم؟";
         }
 
         const token = env.TELEGRAM_BOT_TOKEN;
