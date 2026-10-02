@@ -45,7 +45,12 @@ async function handleUpdate(update, env) {
 }
 
 async function sendTelegramMessage(chatId, text, token) {
-  const botToken = token || 'YOUR_BOT_TOKEN_HERE';
+  const botToken = token;
+  if (!botToken) {
+    console.error('TELEGRAM_BOT_TOKEN is not defined in environment variables.');
+    return;
+  }
+  
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
   const payload = {
@@ -63,4 +68,3 @@ async function sendTelegramMessage(chatId, text, token) {
   } catch (error) {
     console.error('Failed to send message to Telegram:', error);
   }
-}
