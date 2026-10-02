@@ -44,4 +44,4 @@ export default {
       return new Response('Error: ' + err.message, { status: 200 });
     }
   }
-}
+};
