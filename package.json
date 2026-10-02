@@ -1,8 +1,8 @@
 {
-  "name": "telegram-bot",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "itty-router": "^4.0.2"
-  }
+"name": "my-bot",
+"version": "1.0.0",
+"private": true,
+"devDependencies": {
+"wrangler": "^4.0.0"
+}
 }
