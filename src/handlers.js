@@ -6,21 +6,28 @@ export async function handleTelegramUpdate(update, botToken) {
 
   let replyText = "متوجه نشدم! از دکمه‌ها استفاده کن.";
 
+  // اینجا دستورات و کلمات جدید رو اضافه کردیم
   if (text === "/start") {
-    replyText = "سلام! ربات با موفقیت فعال شد. از دکمه‌های زیر استفاده کن:";
+    replyText = "سلام! ربات پیشرفته شما با موفقیت فعال شد. از دکمه‌های زیر استفاده کنید:";
   } else if (text === "ساعت") {
     const now = new Date();
     replyText = `⏰ ساعت فعلی: ${now.toLocaleTimeString('fa-IR', { timeZone: 'Asia/Tehran' })}`;
   } else if (text === "تقویم") {
     const today = new Date();
     replyText = `📅 تاریخ امروز: ${today.toLocaleDateString('fa-IR', { timeZone: 'Asia/Tehran' })}`;
+  } else if (text === "آب و هوا") {
+    // فعلاً یک پاسخ نمونه می‌ذاریم، بعداً می‌تونیم به API آب و هوا وصلش کنیم
+    replyText = "🌤 وضعیت هوا: آفتابی و عالی! (به زودی اطلاعات آنلاین اضافه میشه)";
+  } else if (text === "راهنما") {
+    replyText = "💡 این ربات روی کلودفلر و گیت‌هاب میزبانی میشه. با استفاده از دکمه‌های پایین صفحه می‌تونی باهاش کار کنی.";
   }
 
-  // ساخت کیبورد برای تعامل ساده با ربات
+  // کیبورد جدید با گزینه‌های بیشتر
   const keyboard = {
     reply_markup: {
       keyboard: [
         [{ text: "ساعت" }, { text: "تقویم" }],
+        [{ text: "آب و هوا" }, { text: "راهنما" }],
         [{ text: "/start" }]
       ],
       resize_keyboard: true,
