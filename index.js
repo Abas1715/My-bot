@@ -1,7 +1,7 @@
 export default {
   async fetch(request, env, ctx) {
     if (request.method !== 'POST') {
-      return new Response('Telegram Bot Worker is active!', { status: 200 });
+      return new Response('Telegram Bot Worker is active and running correctly!', { status: 200 });
     }
 
     try {
@@ -11,14 +11,16 @@ export default {
         const chatId = update.message.chat.id;
         const text = update.message.text ? update.message.text.trim() : "";
         
-        let replyText = "پیام شما دریافت شد. در حال حاضر ربات آماده دریافت دستورات است! ✨";
+        let replyText = "سلام! من سیستم هوشمند شما هستم. چطور می‌توانم کمکتان کنم؟";
         
-        if (text === '/start') {
-          replyText = "سلام! 🚀 ربات شما با موفقیت فعال شد و آماده پاسخگویی است.";
-        } else if (text === '/help') {
-          replyText = "راهنما:\nدستورات معتبر:\n/start - شروع ربات\n/help - راهنما";
+        if (text === '/start' || text.toLowerCase().startsWith('/start')) {
+          replyText = "سلام! 🚀 ربات شما با موفقیت و به صورت کاملاً جدید فعال شد.";
+        } else if (text === '/help' || text.toLowerCase().startsWith('/help')) {
+          replyText = "راهنمای ربات:\n/start - شروع به کار\n/help - دریافت راهنمایی";
+        } else if (text.includes('خوبی')) {
+          replyText = "ممنون، من حالم عالیه! شما چطورید؟";
         } else if (text.length > 0) {
-          replyText = `پیام شما با موفقیت دریافت شد: "${text}". چطور می‌توانم کمکتان کنم؟`;
+          replyText = `دستور یا پیام شما («${text}») دریافت شد. چطور می‌توانم در این زمینه کمکتان کنم؟`;
         }
 
         const token = env.TELEGRAM_BOT_TOKEN;
@@ -42,4 +44,4 @@ export default {
       return new Response('Error: ' + err.message, { status: 200 });
     }
   }
-};
+}
