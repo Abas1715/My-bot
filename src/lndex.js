@@ -1,7 +1,12 @@
 export default {
   async fetch(request, env, ctx) {
+    // بررسی اینکه آیا توکن به دست کد می‌رسد یا نه
+    if (!env.TELEGRAM_BOT_TOKEN) {
+      return new Response("Error: TELEGRAM_BOT_TOKEN is missing!", { status: 500 });
+    }
+
     if (request.method !== "POST") {
-      return new Response("Bot is alive!");
+      return new Response("Bot is alive and waiting for requests!");
     }
 
     try {
@@ -16,7 +21,6 @@ export default {
           replyText = "سلام! ربات ساده شما روی کلودفلر روشن است و کار می‌کند.";
         }
 
-        // ارسال پیام به تلگرام بدون نیاز به کتابخانه‌های سنگین
         await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -27,7 +31,7 @@ export default {
         });
       }
     } catch (err) {
-      console.error(err);
+      return new Response("Error: " + err.message, { status: 500 });
     }
 
     return new Response("ok");
