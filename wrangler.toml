@@ -1,6 +1,0 @@
-name = "my-bot"
-main = "src/index.js"
-compatibility_date = "2026-10-02"
-
-[vars]
-TELEGRAM_BOT_TOKEN = "8679743132:AAEntzXsHdX6cV8MMUdtcL_u5iORdjd-g9s"
