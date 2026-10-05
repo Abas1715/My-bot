@@ -1,31 +1,35 @@
-import { Bot } from "grammy";
-import { Hono } from "hono";
+export default {
+  async fetch(request, env, ctx) {
+    if (request.method !== "POST") {
+      return new Response("Bot is alive!");
+    }
 
-const app = new Hono();
+    try {
+      const update = await request.json();
+      
+      if (update.message && update.message.text) {
+        const chatId = update.message.chat.id;
+        const text = update.message.text;
 
-app.post("/webhook", async (c) => {
-  const env = c.env;
-  const bot = new Bot(env.TELEGRAM_BOT_TOKEN);
+        let replyText = `پیام شما دریافت شد: ${text}`;
+        if (text === "/start") {
+          replyText = "سلام! ربات ساده شما روی کلودفلر روشن است و کار می‌کند.";
+        }
 
-  bot.command("start", async (ctx) => {
-    await ctx.reply("سلام! ربات ساده شما روشن است و کار می‌کند.");
-  });
+        // ارسال پیام به تلگرام بدون نیاز به کتابخانه‌های سنگین
+        await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: replyText
+          })
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
 
-  bot.on("message:text", async (ctx) => {
-    const text = ctx.message.text;
-    await ctx.reply(`پیام شما دریافت شد: ${text}`);
-  });
-
-  try {
-    const update = await c.req.json();
-    await bot.handleUpdate(update);
-  } catch (err) {
-    console.error(err);
+    return new Response("ok");
   }
-
-  return c.text("ok");
-});
-
-app.get("/", (c) => c.text("Bot is alive"));
-
-export default app;
+};
