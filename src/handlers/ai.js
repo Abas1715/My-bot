@@ -1,7 +1,7 @@
 export async function getAiResponse(userMessage) {
   try {
     const apiKey = "AQ.Ab8RN6LBjDcOhQ8IgceQlFw7x4l-py2itu6aDaZpiZVPX36HPw";
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -11,21 +11,25 @@ export async function getAiResponse(userMessage) {
       body: JSON.stringify({
         contents: [
           {
-            parts: [{ text: userMessage }]
+            parts: [
+              { text: userMessage }
+            ]
           }
         ]
       })
     });
 
     const data = await response.json();
-    
-    if (data.candidates && data.candidates[0].content.parts[0].text) {
+
+    if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
       return data.candidates[0].content.parts[0].text;
+    } else if (data.error) {
+      return `خطای گوگل: ${data.error.message}`;
     } else {
-      return "متوجه شدم، اما پاسخی از هوش مصنوعی دریافت نشد.";
+      return "پاسخی از هوش مصنوعی دریافت نشد.";
     }
 
   } catch (error) {
-    return "خطا در ارتباط با سرویس هوش مصنوعی.";
+    return `خطای سیستمی: ${error.message}`;
   }
 }
