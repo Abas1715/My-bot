@@ -1,12 +1,13 @@
-export async function getAiResponse(userMessage) {
+export async function getAiResponse(userMessage, env) {
   try {
-    const apiKey = "AQ.Ab8RN6KpH-2fo3x8OLrbvXql8rXWiISCQbhTV9ilowOu_1XYAA";
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const accessToken = env.GEMINI_API_KEY;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
 
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`
       },
       body: JSON.stringify({
         contents: [
@@ -19,13 +20,8 @@ export async function getAiResponse(userMessage) {
 
     const data = await response.json();
     
-    if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0].text) {
-      return data.candidates[0].content.parts[0].text;
-    } else if (data.error) {
-      return `خطای گوگل: ${data.error.message}`;
-    } else {
-      return "متوجه شدم، اما پاسخی دریافت نشد.";
-    }
+    // چاپ کل ساختار برای دیباگ و پیدا کردن محل پاسخ
+    return `پاسخ خام گوگل: ${JSON.stringify(data)}`;
 
   } catch (error) {
     return `خطا: ${error.message}`;
